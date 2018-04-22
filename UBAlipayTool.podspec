@@ -31,7 +31,7 @@ UBAlipayTool 封装了alipay
   s.platform     = :ios, "7.0"
   s.ios.deployment_target = '7.0'
 
-  s.source_files = 'UBAlipayTool/Classes/**/*.{h,m}'
+  s.source_files = 'Alipay/*.{h,m}'
   
   s.dependency 'UBAlipaySDK'
 
@@ -40,7 +40,13 @@ UBAlipayTool 封装了alipay
     'OTHER_LDFLAGS'          => '$(inherited) -undefined dynamic_lookup'
   }
 
+  s.subspec 'Classes' do |ss|
+    ss.source_files = 'UBAlipayTool/Classes/**/*.{h,m}'
+  end
+
   s.subspec 'Util' do |util|
+    #util.xcconfig = { 'HEADER_SEARCH_PATHS' => "${PODS_ROOT}/#{s.name}/UBAlipayTool/Openssl/**" }
+
     util.source_files = 'UBAlipayTool/Util/**/*.{h,m}'
     util.dependency 'UBAlipayTool/OpenSSL'
   end
@@ -51,7 +57,7 @@ UBAlipayTool 封装了alipay
     openssl.ios.preserve_paths      = 'UBAlipayTool/Library/libcrypto.a', 'UBAlipayTool/Library/libssl.a'
     openssl.ios.vendored_libraries  = 'UBAlipayTool/Library/libcrypto.a', 'UBAlipayTool/Library/libssl.a'
     openssl.libraries = 'ssl', 'crypto'
-    openssl.xcconfig = { 'HEADER_SEARCH_PATHS' => "${PODS_ROOT}/#{s.name}/UBAlipayTool/Openssl/**" }
+    openssl.xcconfig = { 'HEADER_SEARCH_PATHS' => "${PODS_ROOT}/#{s.name}/**" }
   end
 
 end
