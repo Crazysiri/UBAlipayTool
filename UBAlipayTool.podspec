@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'UBAlipayTool'
-  s.version          = '1.0.0'
+  s.version          = '1.0.1'
   s.summary          = 'UBAlipayTool 封装了alipay'
 
 # This description is used to generate tags and improve search results.
@@ -31,7 +31,7 @@ UBAlipayTool 封装了alipay
   s.platform     = :ios, "7.0"
   s.ios.deployment_target = '7.0'
 
-  s.source_files = 'AlipaySDKNeeds/Classes/**/*.{h,m}'
+  s.source_files = 'UBAlipayTool/Classes/**/*.{h,m}'
   
   s.dependency 'UBAlipaySDK'
 
@@ -41,17 +41,17 @@ UBAlipayTool 封装了alipay
   }
 
   s.subspec 'Util' do |util|
-    util.source_files = 'AlipaySDKNeeds/Util/**/*.{h,m}'
-    util.dependency 'AlipaySDKNeeds/OpenSSL'
+    util.source_files = 'UBAlipayTool/Util/**/*.{h,m}'
+    util.dependency 'UBAlipayTool/OpenSSL'
   end
   
   s.subspec 'OpenSSL' do |openssl|
-    openssl.source_files = 'AlipaySDKNeeds/Openssl/**/*.h'
-    openssl.public_header_files = 'AlipaySDKNeeds/Openssl/**/*.h'
-    openssl.ios.preserve_paths      = 'AlipaySDKNeeds/Library/libcrypto.a', 'AlipayWrapper/Library/libssl.a'
-    openssl.ios.vendored_libraries  = 'AlipaySDKNeeds/Library/libcrypto.a', 'AlipayWrapper/Library/libssl.a'
+    openssl.source_files = 'UBAlipayTool/Openssl/**/*.h'
+    openssl.public_header_files = 'UBAlipayTool/Openssl/**/*.h'
+    openssl.ios.preserve_paths      = 'UBAlipayTool/Library/libcrypto.a', 'UBAlipayTool/Library/libssl.a'
+    openssl.ios.vendored_libraries  = 'UBAlipayTool/Library/libcrypto.a', 'UBAlipayTool/Library/libssl.a'
     openssl.libraries = 'ssl', 'crypto'
-    openssl.xcconfig = { 'HEADER_SEARCH_PATHS' => "${PODS_ROOT}/#{s.name}/AlipaySDKNeeds/Openssl/**" }
+    openssl.xcconfig = { 'HEADER_SEARCH_PATHS' => "${PODS_ROOT}/#{s.name}/UBAlipayTool/Openssl/**" }
   end
 
 end
