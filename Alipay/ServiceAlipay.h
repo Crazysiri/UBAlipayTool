@@ -9,6 +9,10 @@
 #define USING_ALIPAY 1
 
 #import <Foundation/Foundation.h>
+
+#import "ServiceAlipayAuthConfig.h"
+#import "ServiceAlipayAuthOrder.h"
+
 #import "ServiceAlipayConfig.h"
 #import "ServiceAlipayOrder.h"
 /**
@@ -39,6 +43,8 @@ typedef NS_ENUM(NSInteger, AlipayStatus) {
 
 @interface ServiceAlipay : NSObject
 @property (readonly, nonatomic) ServiceAlipayConfig *config;
+@property (readonly, nonatomic) ServiceAlipayAuthConfig *authConfig;
+
 
 @property (nonatomic, readonly) BOOL					ready;
 @property (nonatomic, readonly) BOOL					installed;
@@ -50,6 +56,12 @@ typedef NS_ENUM(NSInteger, AlipayStatus) {
 
 + (BOOL)installed;
 
+//支付
 - (void)payWithOrder:(ServiceAlipayOrder *)order succeed:(void(^)(void))succeed failed:(void(^)(void))failed;
+
+//授权
+- (void)authWithOrder:(ServiceAlipayAuthOrder *)order success:(void(^)(NSString *authCode,NSDictionary *result))success faild:(void (^)(NSDictionary * result))failed;
+
 - (void)handleResultUrl:(NSURL *)url;
+
 @end

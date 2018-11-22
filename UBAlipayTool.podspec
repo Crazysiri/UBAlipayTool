@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'UBAlipayTool'
-  s.version          = '1.0.2'
+  s.version          = '1.0.3'
   s.summary          = 'UBAlipayTool 封装了alipay'
 
 # This description is used to generate tags and improve search results.
@@ -18,7 +18,10 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-UBAlipayTool 封装了alipay
+1.0.2:
+    1.支付
+1.0.3:
+    1.增加授权
                        DESC
 
   s.homepage         = 'https://github.com/Crazysiri/UBAlipayTool.git'

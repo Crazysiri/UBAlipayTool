@@ -91,9 +91,9 @@ typedef void(^ServiceAlipayReturnBlock)(void);
 }
 
 + (BOOL)installed {
-    NSString *	urlSafypayString = [NSString stringWithFormat:@"safepay://alipayclient"];
+    NSString *urlSafypayString = [NSString stringWithFormat:@"alipay://"];
     
-    NSURL *		safepayUrl = [NSURL URLWithString:urlSafypayString];
+    NSURL *safepayUrl = [NSURL URLWithString:urlSafypayString];
     
     if ( [[UIApplication sharedApplication] canOpenURL:safepayUrl] )
     {
@@ -192,38 +192,15 @@ typedef void(^ServiceAlipayReturnBlock)(void);
 
 #pragma mark - auth
 
-- (void)auth {
-    //生成 auth info 对象
-    APAuthV2Info *authInfo = [APAuthV2Info new];
-    authInfo.pid = self.authConfig.pid;
-    authInfo.appID = self.authConfig.appId;
+- (void)authWithOrder:(ServiceAlipayAuthOrder *)order success:(void(^)(NSString *authCode,NSDictionary *result))success faild:(void (^)(NSDictionary * result))failed {
+    NSString *appScheme = self.authConfig.alipay_scheme;
+    NSString *orderString = [order generateWithConfig:self.authConfig];
     
-    //auth type
-    NSString *authType = [[NSUserDefaults standardUserDefaults] objectForKey:@"authType"];
-    if (authType) {
-        authInfo.authType = authType;
-    }
-    
-    //应用注册scheme,在AlixPayDemo-Info.plist定义URL types
-    NSString *appScheme = self.config.alipay_scheme;
-    
-    // 将授权信息拼接成字符串
-    NSString *authInfoStr = [authInfo description];
-    NSLog(@"authInfoStr = %@",authInfoStr);
-    
-    // 获取私钥并将商户信息签名,外部商户可以根据情况存放私钥和签名,只需要遵循RSA签名规范,并将签名字符串base64编码和UrlEncode
-    NSString *signedString = nil;
-    RSADataSigner* signer = [[RSADataSigner alloc] initWithPrivateKey:self.authConfig.privateKey];
-    signedString = [signer signString:authInfoStr withRSA2:YES];
-
-    
-    // 将签名成功字符串格式化为订单字符串,请严格按照该格式
-    if (signedString.length > 0) {
-        authInfoStr = [NSString stringWithFormat:@"%@&sign=%@&sign_type=%@", authInfoStr, signedString, @"RSA2"];
-        [[AlipaySDK defaultService] auth_V2WithInfo:authInfoStr
+    if (orderString && orderString.length > 0) {
+        [[AlipaySDK defaultService] auth_V2WithInfo:orderString
                                          fromScheme:appScheme
                                            callback:^(NSDictionary *resultDic) {
-                                               NSLog(@"result = %@",resultDic);
+                                               //                                                   BBLog(@"result = %@",resultDic);
                                                // 解析 auth code
                                                NSString *result = resultDic[@"result"];
                                                NSString *authCode = nil;
@@ -236,9 +213,15 @@ typedef void(^ServiceAlipayReturnBlock)(void);
                                                        }
                                                    }
                                                }
-                                               NSLog(@"授权结果 authCode = %@", authCode?:@"");
+                                               
+                                               if (authCode.length && success) {
+                                                   success(authCode,resultDic);
+                                               } else if (failed) {
+                                                   failed(resultDic);
+                                               }
                                            }];
     }
-
+    
 }
+
 @end
