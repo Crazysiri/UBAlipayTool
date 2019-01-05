@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'UBAlipayTool'
-  s.version          = '1.0.3.1'
+  s.version          = '1.0.3.2'
   s.summary          = 'UBAlipayTool 封装了alipay'
 
 # This description is used to generate tags and improve search results.
@@ -22,6 +22,8 @@ Pod::Spec.new do |s|
     1.支付
 1.0.3.1:
     1.增加授权
+1.0.3.2:
+    1.bug fix
                        DESC
 
   s.homepage         = 'https://github.com/Crazysiri/UBAlipayTool.git'

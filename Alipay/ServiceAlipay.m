@@ -43,7 +43,7 @@ typedef void(^ServiceAlipayReturnBlock)(void);
 }
 
 - (ServiceAlipayAuthConfig *)authConfig {
-    if (_authConfig) {
+    if (!_authConfig) {
         _authConfig = [[ServiceAlipayAuthConfig alloc]init];
     }
     return _authConfig;
@@ -56,7 +56,7 @@ typedef void(^ServiceAlipayReturnBlock)(void);
 
 - (void)payWithOrder:(ServiceAlipayOrder *)order succeed:(void(^)(void))succeed failed:(void(^)(void))failed{
     
-
+    
     self.failedBlock = failed;
     self.succeedBlock = succeed;
     __weak typeof(self) weakself = self;
@@ -77,13 +77,13 @@ typedef void(^ServiceAlipayReturnBlock)(void);
         return;
     }
     
-//    if (![self installed]) {
-//        self.errorCode = AlipayStatusErrorInstallAlipay;
-//        self.errorDesc = @"请先安装支付宝";
-//        self.failedBlock();
-//        return;
-//    }
-//
+    //    if (![self installed]) {
+    //        self.errorCode = AlipayStatusErrorInstallAlipay;
+    //        self.errorDesc = @"请先安装支付宝";
+    //        self.failedBlock();
+    //        return;
+    //    }
+    //
     
     [[AlipaySDK defaultService] payOrder:orderString fromScheme:appScheme callback:^(NSDictionary *resultDic) {
         [weakself handleResultDictionary:resultDic];
@@ -132,8 +132,8 @@ typedef void(^ServiceAlipayReturnBlock)(void);
 }
 
 - (BOOL)verifyWithResult:(NSString *)result sign:(NSString *)signString{
-
-   RSADataVerifier *verfifier =  [[RSADataVerifier alloc]initWithPublicKey:self.config.publicKey];
+    
+    RSADataVerifier *verfifier =  [[RSADataVerifier alloc]initWithPublicKey:self.config.publicKey];
     if ( nil == verfifier )
     {
         NSLog( @"Alipay, failed to pay" );
@@ -163,7 +163,7 @@ typedef void(^ServiceAlipayReturnBlock)(void);
         //支付回调
         [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
             [weakself handleResultDictionary:resultDic];
-
+            
         }];
         
         
@@ -194,6 +194,7 @@ typedef void(^ServiceAlipayReturnBlock)(void);
 
 - (void)authWithOrder:(ServiceAlipayAuthOrder *)order success:(void(^)(NSString *authCode,NSDictionary *result))success faild:(void (^)(NSDictionary * result))failed {
     NSString *appScheme = self.authConfig.alipay_scheme;
+    
     NSString *orderString = [order generateWithConfig:self.authConfig];
     
     if (orderString && orderString.length > 0) {
